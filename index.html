@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Landing Page</title>
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+ <div class="music-control">
+  <button id="music-btn" class="button">🔊 Music On/Off</button>
+</div>
+
+    <div class="container">
+
+        <h1 class="title">Welcome to Cruz & Noughts</h1>
+        <img src="newphoto.jpg" alt="Tic Tac Toe Game" class="game-image">
+        
+        <div class="button-group">
+            <button class="button normal-mode" onclick="startNormalMode()">Start Normal Mode</button>
+            <button class="button timer-mode" onclick="startTimerMode()">Start Timer Mode</button>
+        </div>
+<br><br><br>
+       <div class="rules-section">
+  <h2><u>Game Rules</u></h2>
+  <ul class="rules-list">
+    <li>Choose a game mode — <strong>Normal Mode</strong> or <strong>Timer Mode</strong> — to begin.</li>
+    <li>Enter both player names and click the <strong>Start</strong> button to begin the match.</li>
+    <li>After <strong>every fourth move</strong>, the player’s <strong>first move will be removed automatically</strong>. This continues until a winner is determined or the game ends in a draw.</li>
+    <li>To restart the game, click the <strong>Restart</strong> button, then press <strong>Start</strong> again.</li>
+    <li>In <strong>Timer Mode</strong>, each player gets <strong>10 seconds</strong> per move. Failure to play within the time limit results in a turn loss.</li>
+  </ul>
+</div>
+
+<audio id="bg-music" autoplay loop>
+  <source src="gamesound.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+ </div>
+
+ 
+<script>
+const music = document.getElementById('bg-music');
+const musicBtn = document.getElementById('music-btn');
+
+// Set default volume
+music.volume = 0.6;
+
+// Try to autoplay when page loads
+let isPlaying = true;
+localStorage.setItem('musicPlaying', 'true');
+
+function playMusic() {
+  music.muted = false;
+  music.play().catch(() => {
+    // If browser blocks autoplay, wait for any click
+    document.addEventListener('click', () => {
+      music.play();
+    }, { once: true });
+  });
+}
+playMusic();
+
+// Button control
+musicBtn.textContent = "Music🔊";
+musicBtn.addEventListener('click', () => {
+  if (isPlaying) {
+    music.pause();
+    musicBtn.textContent = "Music🔇";
+    localStorage.setItem('musicPlaying', 'false');
+  } else {
+    music.play();
+    musicBtn.textContent = "Music🔊";
+    localStorage.setItem('musicPlaying', 'true');
+  }
+  isPlaying = !isPlaying;
+});
+
+// Navigation
+function startNormalMode() {
+  const musicState = localStorage.getItem('musicPlaying');
+  if (musicState === 'true') {
+    localStorage.setItem('resumeMusic', 'true');
+  }
+  window.location.href = 'Normal.html';
+}
+
+function startTimerMode() {
+  const musicState = localStorage.getItem('musicPlaying');
+  if (musicState === 'true') {
+    localStorage.setItem('resumeMusic', 'true');
+  }
+  window.location.href = 'devu.html';
+}
+</script>
+
+</body>
+</html>
