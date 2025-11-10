@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cruz & Noughts</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  
+
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="dot"></div>
+        <h1>Cruz & Noughts</h1>
+      </div>
+      <button id="musicToggle" class="sound-btn" title="Mute/Unmute">🔇Mute</button>
+      <audio id="bg-music" src="gamesound.mp3" loop></audio>
+
+      <div class="toolbar">
+        <button id="restartBtn" class="ghost" title="Restart">Restart</button>
+        <button id="newGameBtn" title="New Game">New Game</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="left">
+        <div class="panel card">
+          <div class="mode">
+            <div class="row">
+              <div id="m1" class="chip active">Play vs Computer</div>
+              <div id="m2" class="chip">2 Player Game</div><br>
+              <button id="normalModeBtn" class="mode-btn">Normal Mode</button> 
+            </div>
+          </div>
+        </div>
+
+        <div class="panel card names">
+          <div class="field" id="p1field">
+            <label>Player 1 (X)</label>
+            <input id="player1" placeholder="Enter name" />
+          </div>
+          <div class="field" id="p2field">
+            <label id="p2label">Computer (O)</label>
+            <input id="player2" placeholder="Enter name" value="Computer" />
+          </div>
+          <div style="display:flex; gap:10px; margin-top:6px">
+            <button id="startBtn">Start Game</button>
+          </div>
+        </div>
+
+        <div class="panel card counts">
+          <div class="countCard">
+            <h3>X move count</h3>
+            <p id="xMoveCount">0</p>
+          </div>
+          <div class="countCard">
+            <h3>O move count</h3>
+            <p id="oMoveCount">0</p>
+          </div>
+        </div>
+
+        <div class="panel card status">
+          <div id="message"><strong>Choose a mode, enter names, and press Start.</strong></div>
+        </div>
+      </section>
+
+      <section class="boardWrap card">
+        <div id="board" class="board">
+          <div class="cell" id="cell1" onclick="onCellClick(1)"></div>
+          <div class="cell" id="cell2" onclick="onCellClick(2)"></div>
+          <div class="cell" id="cell3" onclick="onCellClick(3)"></div>
+          <div class="cell" id="cell4" onclick="onCellClick(4)"></div>
+          <div class="cell" id="cell5" onclick="onCellClick(5)"></div>
+          <div class="cell" id="cell6" onclick="onCellClick(6)"></div>
+          <div class="cell" id="cell7" onclick="onCellClick(7)"></div>
+          <div class="cell" id="cell8" onclick="onCellClick(8)"></div>
+          <div class="cell" id="cell9" onclick="onCellClick(9)"></div>
+        </div>
+        <div class="actions">
+          <button id="hintBtn" class="ghost" title="Suggest best move">Hint</button>
+        </div>
+        <div class="footer"><strong>Each player may keep only their last 3 marks. On their 4th, the oldest disappears. First to 3-in-a-row wins.</strong> </div>
+      </section>
+    </div>
+
+    <!-- New modern soft click sounds -->
+    <audio id="sound-x" src="s2.mp3" preload="auto"></audio>
+    <audio id="sound-o" src="s1.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="winning-218995.mp3" preload="auto"></audio>
+  </div>
+
+  <script src="game.js" defer></script>
+</body>
+</html>

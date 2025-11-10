@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cruz & Noughts - Normal Mode</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="dot"></div>
+        <h1>Cruz & Noughts - Normal Mode</h1>
+      </div>
+<button id="musicToggle" class="sound-btn" title="Mute/Unmute">🔇</button>
+<audio id="bg-music" src="gamesound.mp3" autoplay></audio>
+
+      <div class="toolbar">
+        <button id="n-restart">Restart</button>
+        <button id="backBtn">Back</button>
+      </div>
+    </header>
+
+<audio id="sound-x" src="s1.mp3"></audio>
+<audio id="sound-o" src="s2.mp3"></audio>
+<audio id="win-sound" src="winning-218995.mp3"></audio>
+<audio id="draw-sound" src="winning-218995.mp3"></audio>
+
+    <main>
+      <p id="n-message" class="statusTxt">X Starts</p>
+
+      <section class="boardWrap card">
+        <div id="board" class="board">
+          <div class="cell" id="cell1" onclick="n_onCellClick(1)"></div>
+          <div class="cell" id="cell2" onclick="n_onCellClick(2)"></div>
+          <div class="cell" id="cell3" onclick="n_onCellClick(3)"></div>
+          <div class="cell" id="cell4" onclick="n_onCellClick(4)"></div>
+          <div class="cell" id="cell5" onclick="n_onCellClick(5)"></div>
+          <div class="cell" id="cell6" onclick="n_onCellClick(6)"></div>
+          <div class="cell" id="cell7" onclick="n_onCellClick(7)"></div>
+          <div class="cell" id="cell8" onclick="n_onCellClick(8)"></div>
+          <div class="cell" id="cell9" onclick="n_onCellClick(9)"></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+
+<script>
+let moves = Array(10).fill(null);
+let current = "X";
+let gameOver = false;
+
+function n_onCellClick(cell){
+  if (gameOver || moves[cell] !== null) return;
+
+moves[cell] = current;
+document.getElementById("cell" + cell).textContent = current;
+
+if (current === "X") playX();
+else playO();
+
+
+  if (n_checkWin()) {
+    n_displayWinner(current);
+    gameOver = true;
+    return;
+  }
+
+  if (!moves.slice(1).includes(null)) {
+    playDraw();
+    document.getElementById("n-message").textContent = "Draw!";
+
+    return;
+  }
+
+  current = current === "X" ? "O" : "X";
+  document.getElementById("n-message").textContent = `${current}'s Turn`;
+}
+
+function n_checkWin(){
+  const winLines = [
+    [1,2,3],[4,5,6],[7,8,9],
+    [1,4,7],[2,5,8],[3,6,9],
+    [1,5,9],[3,5,7]
+  ];
+
+  for (let line of winLines){
+    const [a,b,c] = line;
+    if (moves[a] && moves[a] === moves[b] && moves[a] === moves[c]){
+      line.forEach(i => document.getElementById("cell"+i).classList.add("winner"));
+      return true;
+    }
+  }
+  return false;
+}
+
+function n_displayWinner(sym){
+  playWin();
+  document.getElementById("n-message").innerHTML = `<span class='winnerTxt'>${sym} Wins! 🎉</span>`;
+}
+
+
+document.getElementById("n-restart").onclick = () => {
+  moves = Array(10).fill(null);
+  current = "X";
+  gameOver = false;
+  for (let i=1;i<=9;i++){
+    const cell = document.getElementById("cell"+i);
+    cell.textContent = "";
+    cell.classList.remove("winner");
+  }
+  document.getElementById("n-message").textContent = "X Starts";
+};
+
+document.getElementById("backBtn").onclick = () => {
+  window.location.href = "index.html";
+};
+// ===== Music Control =====
+let musicStarted = false;
+const music = document.getElementById('bg-music');
+const musicToggle = document.getElementById('musicToggle');
+
+// Smooth fade helper
+function fadeVolume(target) {
+  let step = (target - music.volume) / 12;
+  let fade = setInterval(() => {
+    music.volume += step;
+    if (Math.abs(music.volume - target) < 0.02) {
+      music.volume = target;
+      clearInterval(fade);
+    }
+  }, 25);
+}
+
+
+function playX() {
+  const s = document.getElementById("sound-x");
+  s.currentTime = 0;
+  s.play();
+}
+
+function playO() {
+  const s = document.getElementById("sound-o");
+  s.currentTime = 0;
+  s.play();
+}
+
+function playWin() {
+  const s = document.getElementById("win-sound");
+  s.currentTime = 0;
+  s.play();
+}
+
+function playDraw() {
+  const s = document.getElementById("draw-sound");
+  s.currentTime = 0;
+  s.play();
+}
+
+// Start music safely (first click rule)
+function ensureMusicStart(){
+  if (!musicStarted) {
+    musicStarted = true;
+    music.volume = 0;
+    music.play();
+    fadeVolume(0.6);
+    musicToggle.textContent = "🔊"; // ✅ Show correct icon from start
+  }
+}
+
+// Toggle mute / unmute
+musicToggle.onclick = () => {
+  ensureMusicStart();
+
+  if (!music.paused) {
+    // Currently playing → mute
+    fadeVolume(0);
+    setTimeout(()=>music.pause(), 300);
+    musicToggle.textContent = "🔇"; // ✅ Show muted icon
+  } else {
+    // Currently muted → play
+    music.play();
+    fadeVolume(0.6);
+    musicToggle.textContent = "🔊"; // ✅ Show playing icon
+  }
+};
+
+// Start music on first click anywhere
+document.addEventListener("click", ensureMusicStart, { once: true });
+
+</script>
+
+</body>
+</html>
